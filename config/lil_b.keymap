@@ -12,8 +12,40 @@
 #define BRIU &kp C_BRI_UP
 #define BRID &kp C_BRI_DN
 #define SWITCH &kp LA(TAB)
+#define BOOT &bootloader
+
+#define COMBO(NAME, BINDINGS, KEYPOS) \
+combo_##NAME { \
+    timeout-ms = <40>; \
+    bindings = <BINDINGS>; \
+    key-positions = <KEYPOS>; \
+    layers = <AL1>; \
+};
+
+#define COMBOS_TOP(LTPR, LTRM, LTMI, BTII, RTIM, RTMR, RTRP) \
+  COMBO(_ltpr, LTPR, 0 1) \
+  COMBO(_ltrm, LTRM, 1 2) \
+  COMBO(_ltmi, LTMI, 2 3) \
+  COMBO(_btii, BTII, 3 4) \
+  COMBO(_rtim, RTIM, 4 5) \
+  COMBO(_rtmr, RTMR, 5 6) \
+  COMBO(_rtrp, RTRP, 6 7)
+#define COMBOS_BTM(LBPR, LBRM, LBMI, BBII, RBIM, RBMR, RBRP) \
+  COMBO(_lbpr, LBPR, 8 9) \
+  COMBO(_lbrm, LBRM, 9 10) \
+  COMBO(_lbmi, LBMI, 10 11) \
+  COMBO(_bbii, BBII, 11 12) \
+  COMBO(_rbim, RBIM, 12 13) \
+  COMBO(_rbmr, RBMR, 13 14) \
+  COMBO(_rbrp, RBRP, 14 15)
 
 / {
+    combos {
+        compatible = "zmk,combos";
+        COMBOS_TOP(&kp Q, &kp W, &kp D, &kp M, &kp H, &kp G, &kp Y)
+        COMBOS_BTM(&kp Z, &kp X, &kp B, &kp V, &kp K, &kp J, &kp SLASH)
+    };
+
     // layer1 on hold, layer2 sticky on tap
     behaviors {
         ms: behavior_mo_sticky {
@@ -32,14 +64,16 @@
 // |     |    16     |  17 ||  18 |     19    |     |
 // --------------------------------------------------
 
+//       q     w     d      m     h     g     y
+//       z     x     b      v     k     j     /
 //  ________________________________________________
 // |   a |   r |   s |   t ||   n |   e |   i |   o |
-// |   x |   c |   v |   d ||   h |   , |   . |   / |
-// |     |    16     |  17 ||  18 |     19    |     |
+// |   ' |   c |   f |   p ||   l |   u |   , |   . |
+// |     |           |     ||     |           |     |
 // --------------------------------------------------
 //  ________________________________________________
-// |   q |   w |   f |   p ||   l |   u |   y |   ' |
-// |   z |   ; |   b |   g ||   j |   k |   m |   - |
+// |     |     |     |     ||     |     |     |   ; |
+// |     |     |     |     ||     |     |     |   - |
 // |     |    16     |  17 ||  18 |     19    |     |
 // --------------------------------------------------
 / {
@@ -49,14 +83,14 @@
         al1 {
             bindings = <
                 &kp A      &kp R      &kp S      &kp T      &kp N      &kp E      &kp I      &kp O
-                &kp X      &kp C      &kp V      &kp D      &kp H      &kp COMMA  &kp DOT    &kp SLASH
+                &kp SEMI   &kp C      &kp F      &kp P      &kp L      &kp U      &kp COMMA  &kp DOT
                                  &kp LSFT        &kp SPACE  &ms SYM AL2      &mo NUM
             >;
         };
         al2 {
             bindings = <
-                &kp Q      &kp W      &kp F      &kp P      &kp L      &kp U      &kp Y      &kp SQT
-                &kp Z      &kp SEMI   &kp B      &kp G      &kp J      &kp K      &kp M      &kp MINUS
+                &trans     &trans     &trans     &trans     &trans     &trans     &trans     &kp SQT
+                &trans     &trans     &trans     &trans     &trans     &trans     &trans     &kp MINUS
                                  &trans          &trans     &trans           &trans
             >;
         };
@@ -69,8 +103,8 @@
         };
         num {
             bindings = <
-               &bootloader  &sk LGUI   BRIU      &kp N6     &kp N0     &kp N1     &kp N2     &kp N8
-                &trans      &sk LCTRL  BRID      &kp N7     &kp N3     &kp N4     &kp N5     &kp N9
+                BOOT       &sk LGUI   BRIU       &kp N6     &kp N0     &kp N1     &kp N2     &kp N8
+                &kp EQUAL  &sk LCTRL  BRID       &kp N7     &kp N3     &kp N4     &kp N5     &kp N9
                                  &trans          &trans     &trans           &trans
             >;
         };
